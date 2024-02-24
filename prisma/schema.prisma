@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Profile  {
+  firebaseUserID           String            @id @default(uuid())
+  firstName    String
+  lastName     String
+  displayName  String
+  profileImage String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  isAdmin      Boolean           @default(false)
+  games        Game[]
+  participants GameParticipant[]
+}
+
+model Game {
+  id           String            @id @default(uuid())
+  name         String
+  description  String?
+  createdAt    DateTime          @default(now())
+  creatorId    String
+  creator      Profile              @relation(fields: [creatorId], references: [firebaseUserID], onDelete: Cascade)
+  maps         Map[]
+  participants GameParticipant[]
+  tokens       Token[]
+  gameInfo     GameInfo[]
+}
+
+model Map {
+  id      String @id @default(uuid())
+  name    String
+  mapData Json
+  gameId  String
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model GameParticipant {
+  id         String   @id @default(uuid())
+  userId     String
+  user       Profile     @relation(fields: [userId], references: [firebaseUserID], onDelete: Cascade)
+  gameId     String
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  role       String
+  joinedAt   DateTime @default(now())
+  isAccepted Boolean  @default(false)
+
+  @@unique([userId, gameId])
+}
+
+model Token {
+  id       String  @id @default(uuid())
+  name     String
+  imageUrl String
+  isCustom Boolean
+  gameId   String?
+  game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String
+  gameId    String
+  parentId  String?
+  parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  gameInfos GameInfo[]
+}
+
+model GameInfo {
+  id         String   @id @default(uuid())
+  gameId     String
+  game       Game     @relation(fields: [gameId], references: [id])
+  title      String
+  content    String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
