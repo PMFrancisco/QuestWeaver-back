@@ -6,17 +6,18 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model Profile  {
-  firebaseUserID           String            @id @default(uuid())
-  firstName    String
-  lastName     String
-  displayName  String
-  profileImage String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  isAdmin      Boolean           @default(false)
-  games        Game[]
-  participants GameParticipant[]
+
+model Profile {
+  firebaseUserID String            @id @default(uuid())
+  firstName      String
+  lastName       String
+  displayName    String
+  profileImage   String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  isAdmin        Boolean           @default(false)
+  games          Game[]
+  participants   GameParticipant[]
 }
 
 model Game {
@@ -25,7 +26,7 @@ model Game {
   description  String?
   createdAt    DateTime          @default(now())
   creatorId    String
-  creator      Profile              @relation(fields: [creatorId], references: [firebaseUserID], onDelete: Cascade)
+  creator      Profile           @relation(fields: [creatorId], references: [firebaseUserID], onDelete: Cascade)
   maps         Map[]
   participants GameParticipant[]
   tokens       Token[]
@@ -43,7 +44,7 @@ model Map {
 model GameParticipant {
   id         String   @id @default(uuid())
   userId     String
-  user       Profile     @relation(fields: [userId], references: [firebaseUserID], onDelete: Cascade)
+  user       Profile  @relation(fields: [userId], references: [firebaseUserID], onDelete: Cascade)
   gameId     String
   game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   role       String
@@ -83,4 +84,3 @@ model GameInfo {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
-
