@@ -1,3 +1,13 @@
+# [0.2.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.1.1...v0.2.0) (2024-02-28)
+
+
+### Features
+
+* added profile edit ([9bdaf7b](https://github.com/PMFrancisco/QuestWeaver-back/commit/9bdaf7b3e301d0f41337adba972d0ecec129d27e))
+* get profile and edit profile ([f1473eb](https://github.com/PMFrancisco/QuestWeaver-back/commit/f1473eb41906d97d7ba20190fb526abcf1a885ee))
+
+
+
 ## [0.1.1](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.1.0...v0.1.1) (2024-02-25)
 
 
