@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const admin = require('firebase-admin');
 
-const serviceAccount = require("./config/firebase-service-account-key.json");
+const serviceAccount = require("./keys/firebase-service-account-key.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

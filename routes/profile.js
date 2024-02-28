@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
           firstName,
           lastName,
           displayName,
-          profileImage: profileImage,
         },
       });
     } else {
@@ -63,27 +62,52 @@ router.get("/:userId", async (req, res) => {
 /**
  * @swagger
  * /profile/edit:
- *   get:
- *     summary: Edit user profile page
+ *   put:
+ *     summary: Edit user profile
  *     tags: [User]
- *     description: Renders the page for editing the user's profile.
+ *     description: Updates the user's profile information.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - displayName
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               displayName:
+ *                 type: string
  *     responses:
- *       200:
- *         description: Edit profile page rendered.
+ *       302:
+ *         description: Redirects to the profile page.
  *       500:
- *         description: Server Error.
+ *         description: Internal Server Error.
  */
 
-router.get("/edit", async (req, res) => {
+router.put("/edit/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const user = await prisma.user.findUnique({
+
+    const updateResult = await prisma.profile.update({
       where: { firebaseUserID: userId },
+      data: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        displayName: req.body.displayName,
+      },
     });
-    res.json( user);
+    res.json(updateResult)
   } catch (error) {
-    res.status(500).send("Error editing the profile");
+    console.error("Error updating the profile:", error);
+    res.status(500).send("Error updating the profile");
   }
 });
+
 
 module.exports = router;
