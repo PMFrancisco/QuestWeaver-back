@@ -3,13 +3,7 @@ const app = express();
 const port = 3000;
 const morgan = require('morgan');
 const cors = require('cors');
-const admin = require('firebase-admin');
 
-const serviceAccount = require("./keys/firebase-service-account-key.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
 
 const whitelist = ['http://localhost:5173'];
 const corsOptions = {

@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
           firstName,
           lastName,
           displayName,
+          profileImage,
         },
       });
     } else {
