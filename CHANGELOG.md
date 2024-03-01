@@ -1,3 +1,18 @@
+# [0.3.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.2.0...v0.3.0) (2024-03-01)
+
+
+### Bug Fixes
+
+* removed unnecesary code ([92a7077](https://github.com/PMFrancisco/QuestWeaver-back/commit/92a70770039e724959be30a2663d36b4470e6a70))
+
+
+### Features
+
+* added create and get games ([ee3e8a2](https://github.com/PMFrancisco/QuestWeaver-back/commit/ee3e8a252c0543714047e89968f196a8f7e154c6))
+* added edit profile image ([b02af66](https://github.com/PMFrancisco/QuestWeaver-back/commit/b02af66054491d11d5ed868cc2d9dbe4608a8f3d))
+
+
+
 # [0.2.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.1.1...v0.2.0) (2024-02-28)
 
 
