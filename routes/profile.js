@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma");
 
+const upload = require("../config/multer");
+const handleUpload = require("../middlewares/handleUpload");
+
 router.post("/", async (req, res) => {
   const { firebaseUserID, firstName, lastName, displayName, profileImage } =
     req.body;
@@ -105,10 +108,57 @@ router.put("/edit/:userId", async (req, res) => {
     });
     res.json(updateResult)
   } catch (error) {
-    console.error("Error updating the profile:", error);
     res.status(500).send("Error updating the profile");
   }
 });
 
+/**
+ * @swagger
+ * /profile/updateProfilePicture:
+ *   post:
+ *     summary: Update profile picture
+ *     tags: [User]
+ *     description: Uploads and updates the user's profile picture.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - profileImage
+ *             properties:
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       302:
+ *         description: Redirects to the profile page.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
+router.post(
+  "/updateProfilePicture/:userId",
+  upload.single("profileImage"),
+  async (req, res) => {
+    try {
+      const userId = req.params.userId;
+
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+      const cldRes = await handleUpload(dataURI);
+
+      await prisma.profile.update({
+        where: { firebaseUserID: userId },
+        data: { profileImage: cldRes.secure_url },
+      });
+
+      res.json("Image updated");
+    } catch (error) {
+      res.status(500).send("Error updating the profile");
+    }
+  }
+);
 
 module.exports = router;
