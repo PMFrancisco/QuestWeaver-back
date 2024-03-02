@@ -24,6 +24,7 @@ model Game {
   id           String            @id @default(uuid())
   name         String
   description  String?
+  gameImage    String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/v1709376290/QuestWeaver/tabletop_default_image_small_lmpbok.jpg")
   createdAt    DateTime          @default(now())
   creatorId    String
   creator      Profile           @relation(fields: [creatorId], references: [firebaseUserID], onDelete: Cascade)
