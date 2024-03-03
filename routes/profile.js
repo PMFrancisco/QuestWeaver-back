@@ -5,6 +5,42 @@ const prisma = require("../prisma");
 const upload = require("../config/multer");
 const handleUpload = require("../middlewares/handleUpload");
 
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ */
+
+/**
+ * @swagger
+ * /profile:
+ *   post:
+ *     summary: Create or update user profile
+ *     tags: [User]
+ *     description: Creates a new user profile if it doesn't exist, otherwise updates the existing profile.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firebaseUserID:
+ *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               displayName:
+ *                 type: string
+ *               profileImage:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User profile created or updated successfully.
+ *       500:
+ *         description: Internal Server Error.
+ */
 router.post("/", async (req, res) => {
   const { firebaseUserID, firstName, lastName, displayName, profileImage } =
     req.body;
@@ -36,28 +72,32 @@ router.post("/", async (req, res) => {
 
 /**
  * @swagger
- * tags:
- *   name: User
- */
-
-/**
- * @swagger
  * /profile:
  *   get:
  *     summary: View user profile
  *     tags: [User]
- *     description: Renders the user's profile page.
+ *     description: Retrieves the user's profile information.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Renders the user's profile page.
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Profile page rendered.
+ *         description: User profile information retrieved successfully.
+ *       500:
+ *         description: Internal Server Error.
  */
+
 router.get("/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await prisma.profile.findUnique({
       where: { firebaseUserID: userId },
     });
-    res.json( user );
+    res.json(user);
   } catch (error) {
     res.status(500).send("Error getting the profile");
   }
@@ -65,11 +105,18 @@ router.get("/:userId", async (req, res) => {
 
 /**
  * @swagger
- * /profile/edit:
+ * /profile/edit/{userId}:
  *   put:
  *     summary: Edit user profile
  *     tags: [User]
  *     description: Updates the user's profile information.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user whose profile is to be edited.
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -88,8 +135,8 @@ router.get("/:userId", async (req, res) => {
  *               displayName:
  *                 type: string
  *     responses:
- *       302:
- *         description: Redirects to the profile page.
+ *       200:
+ *         description: User profile updated successfully.
  *       500:
  *         description: Internal Server Error.
  */
@@ -106,7 +153,7 @@ router.put("/edit/:userId", async (req, res) => {
         displayName: req.body.displayName,
       },
     });
-    res.json(updateResult)
+    res.json(updateResult);
   } catch (error) {
     res.status(500).send("Error updating the profile");
   }
@@ -114,26 +161,31 @@ router.put("/edit/:userId", async (req, res) => {
 
 /**
  * @swagger
- * /profile/updateProfilePicture:
+ * /profile/updateProfilePicture/{userId}:
  *   post:
  *     summary: Update profile picture
  *     tags: [User]
  *     description: Uploads and updates the user's profile picture.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user whose profile picture is to be updated.
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - profileImage
  *             properties:
  *               profileImage:
  *                 type: string
  *                 format: binary
  *     responses:
- *       302:
- *         description: Redirects to the profile page.
+ *       200:
+ *         description: Profile picture updated successfully.
  *       500:
  *         description: Internal Server Error.
  */
