@@ -1,3 +1,18 @@
+# [0.4.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.3.0...v0.4.0) (2024-03-03)
+
+
+### Bug Fixes
+
+* cors whitelist moved to .env ([035273b](https://github.com/PMFrancisco/QuestWeaver-back/commit/035273b4bcce0a96abb4795fab2c41314a1e7e62))
+
+
+### Features
+
+* **db:** added gameImage to the Game model ([ef430e0](https://github.com/PMFrancisco/QuestWeaver-back/commit/ef430e07a38f2308b7ed42b41dc868fb4ae1f78f))
+* **games:** get individual games ([ced083d](https://github.com/PMFrancisco/QuestWeaver-back/commit/ced083dd0afbc90c5b5d0330ad55a1cf8c47b97c))
+
+
+
 # [0.3.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.2.0...v0.3.0) (2024-03-01)
 
 
