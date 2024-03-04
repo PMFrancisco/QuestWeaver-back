@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.4.0...v0.5.0) (2024-03-04)
+
+
+### Features
+
+* **games:** creating a game also creates a user with creator role ([12bf5e2](https://github.com/PMFrancisco/QuestWeaver-back/commit/12bf5e225ef74f93b0900244f0dfad8c9221bfa8))
+
+
+
 # [0.4.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.3.0...v0.4.0) (2024-03-03)
 
 
@@ -44,15 +53,6 @@
 ### Bug Fixes
 
 * serviceaccount for render ([4301cf7](https://github.com/PMFrancisco/QuestWeaver-back/commit/4301cf7cf5f895425d96bf20772747a169b836f4))
-
-
-
-# [0.1.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/9c99bf6f02e1537439790816f12e807657ae0e46...v0.1.0) (2024-02-25)
-
-
-### Features
-
-* user creation with firebase ([9c99bf6](https://github.com/PMFrancisco/QuestWeaver-back/commit/9c99bf6f02e1537439790816f12e807657ae0e46))
 
 
 
