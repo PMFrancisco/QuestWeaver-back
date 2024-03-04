@@ -45,14 +45,14 @@ router.get("/", async (req, res) => {
  * @swagger
  * /games/createGame/{userId}:
  *   post:
- *     summary: Create a new game
+ *     summary: Create a new game and a game participant with the role 'Creator'
  *     tags: [Games]
- *     description: Creates a new game and redirects to the game page.
+ *     description: Creates a new game and automatically assigns the creating user as a game participant with the role 'Creator'. Returns the created game details.
  *     parameters:
  *       - in: path
  *         name: userId
  *         required: true
- *         description: ID of the user creating the game.
+ *         description: ID of the user creating the game and to be assigned as the game's creator.
  *         schema:
  *           type: string
  *     requestBody:
@@ -71,12 +71,28 @@ router.get("/", async (req, res) => {
  *               description:
  *                 type: string
  *                 description: Description of the game.
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *                 description: Profile image for the game. The image is uploaded as a file.
  *     responses:
  *       200:
- *         description: Game created successfully.
+ *         description: Game and creator participant created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Game and creator participant created
+ *                 gameId:
+ *                   type: string
+ *                   description: The ID of the newly created game.
  *       500:
- *         description: Internal Server Error.
+ *         description: Error creating the game or participant
  */
+
 
 router.post("/createGame/:userId",
 upload.single("profileImage"),
@@ -103,7 +119,16 @@ async (req, res) => {
       },
     });
 
-    res.json("Game created");
+    const gameCreator = await prisma.gameParticipant.create({
+      data: {
+        userId: userId,
+        gameId: newGame.id,
+        role: "Creator",
+        isAccepted: true,
+      },
+    });
+
+    res.json("Game and participant created");
   } catch (error) {
     res.status(500).send("Error creating the game");
   }
