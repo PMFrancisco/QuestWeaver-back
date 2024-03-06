@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.5.0...v0.6.0) (2024-03-06)
+
+
+### Features
+
+* can accept players ([75b2e79](https://github.com/PMFrancisco/QuestWeaver-back/commit/75b2e7917402b8e261649fb4d89188edad3a2a83))
+
+
+
 # [0.5.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.4.0...v0.5.0) (2024-03-04)
 
 
@@ -44,15 +53,6 @@
 
 * added profile edit ([9bdaf7b](https://github.com/PMFrancisco/QuestWeaver-back/commit/9bdaf7b3e301d0f41337adba972d0ecec129d27e))
 * get profile and edit profile ([f1473eb](https://github.com/PMFrancisco/QuestWeaver-back/commit/f1473eb41906d97d7ba20190fb526abcf1a885ee))
-
-
-
-## [0.1.1](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.1.0...v0.1.1) (2024-02-25)
-
-
-### Bug Fixes
-
-* serviceaccount for render ([4301cf7](https://github.com/PMFrancisco/QuestWeaver-back/commit/4301cf7cf5f895425d96bf20772747a169b836f4))
 
 
 
