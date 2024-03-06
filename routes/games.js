@@ -25,21 +25,21 @@ const handleUpload = require("../middlewares/handleUpload");
  *         description: Error getting the games.
  */
 
-router.get("/", async (req, res) => {
-  try {
-    const games = await prisma.game.findMany({
-      include: {
-        creator: true,
-        participants: true,
-      },
-    });
+  router.get("/", async (req, res) => {
+    try {
+      const games = await prisma.game.findMany({
+        include: {
+          creator: true,
+          participants: true,
+        },
+      });
 
-    res.json(games);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error getting the games");
-  }
-});
+      res.json(games);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error getting the games");
+    }
+  });
 
 /**
  * @swagger
@@ -234,6 +234,56 @@ router.get("/:gameId/:userId", async (req, res) => {
     res.json(game)
   } catch (error) {
     res.status(500).send("Error getting the game");
+  }
+});
+
+/**
+ * @swagger
+ * /games/acceptPlayer:
+ *   put:
+ *     summary: Accept a player in a game
+ *     tags: [Games]
+ *     description: Accepts a player's request to join a game.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - gameId
+ *               - userId
+ *             properties:
+ *               gameId:
+ *                 type: string
+ *               userId:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the game page.
+ *       500:
+ *         description: Error updating player status.
+ */
+
+router.post("/acceptPlayer/:gameId/:userId", async (req, res) => {
+  const { gameId, userId } = req.params;
+
+  try {
+    await prisma.gameParticipant.updateMany({
+      where: {
+        gameId: gameId,
+        userId: userId,
+        isAccepted: false,
+      },
+      data: {
+        isAccepted: true,
+      },
+    });
+
+    res.json("Player accepted");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error updating player status");
   }
 });
 
