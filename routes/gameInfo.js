@@ -10,60 +10,117 @@ const prisma = require("../prisma");
 
 /**
  * @swagger
- * /newGameInfo/{gameId}/{categoryId}:
+ * /gameInfo/{gameInfoId}:
  *   get:
- *     summary: New GameInfo page
+ *     summary: Get a specific GameInfo
  *     tags: [GameInfo]
- *     description: Renders the page for creating new GameInfo.
+ *     description: Fetches a specific GameInfo entry by its ID.
  *     parameters:
  *       - in: path
- *         name: gameId
+ *         name: gameInfoId
  *         required: true
- *         description: Game ID.
- *         schema:
- *           type: string
- *       - in: path
- *         name: categoryId
- *         required: true
- *         description: Category ID.
+ *         description: The ID of the GameInfo to fetch.
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: New GameInfo page rendered.
+ *         description: A specific GameInfo entry.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: The GameInfo ID.
+ *                 title:
+ *                   type: string
+ *                   description: The title of the GameInfo.
+ *                 content:
+ *                   type: string
+ *                   description: The content of the GameInfo.
+ *                 categoryId:
+ *                   type: string
+ *                   description: The ID of the category this GameInfo belongs to.
+ *                 gameId:
+ *                   type: string
+ *                   description: The ID of the game this GameInfo is associated with.
+ *       404:
+ *         description: GameInfo not found.
  *       500:
- *         description: Error loading the page.
+ *         description: Error fetching the GameInfo.
  */
+router.get("/:gameInfoId", async (req, res) => {
+  const { gameInfoId } = req.params;
 
-router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
-  const { gameId, categoryId } = req.params;
   try {
-    const categories = await prisma.category.findMany({
-      where: { parentId: null },
-      include: {
-        children: {
-          include: {
-            gameInfos: true,
-          },
-        },
-        gameInfos: true,
-      },
+    const gameInfo = await prisma.gameInfo.findUnique({
+      where: { id: gameInfoId },
     });
 
-    const game = await prisma.game.findUnique({
-      where: { id: gameId },
-    });
-
-    res.json({
-      categories,
-      game,
-      gameId,
-      categoryId,
-    });
+    if (gameInfo) {
+      res.json(gameInfo);
+    } else {
+      res.status(404).send("GameInfo not found");
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error loading the page");
+    res.status(500).send("Error fetching the GameInfo");
   }
 });
+
+
+/**
+ * @swagger
+ * /createGameInfo:
+ *   post:
+ *     summary: Create GameInfo
+ *     tags: [GameInfo]
+ *     description: Creates a new GameInfo entry.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *               - categoryId
+ *               - gameId
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               categoryId:
+ *                 type: string
+ *               gameId:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the game info page.
+ *       500:
+ *         description: Error creating entry.
+ */
+
+router.post("/addGameInfo", async (req, res) => {
+  const { title, content, categoryId, gameId } = req.body;
+  try {
+    const newEntry = await prisma.gameInfo.create({
+      data: {
+        title: title,
+        content: content,
+        categoryId: categoryId,
+        gameId: gameId,
+      },
+    });
+    res.json(newEntry);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error creating entry");
+  }
+});
+
 
 module.exports = router;

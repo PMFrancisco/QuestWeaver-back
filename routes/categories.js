@@ -4,6 +4,13 @@ const prisma = require("../prisma");
 
 /**
  * @swagger
+ * tags:
+ *   name: Category
+ */
+
+
+/**
+ * @swagger
  * /addCategory:
  *   post:
  *     summary: Add Category
@@ -90,6 +97,58 @@ router.get("/:gameId", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Error loading the wiki");
+  }
+});
+
+/**
+ * @swagger
+ * /createGameInfo:
+ *   post:
+ *     summary: Create GameInfo
+ *     tags: [GameInfo]
+ *     description: Creates a new GameInfo entry.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *               - categoryId
+ *               - gameId
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               categoryId:
+ *                 type: string
+ *               gameId:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the game info page.
+ *       500:
+ *         description: Error creating entry.
+ */
+
+router.post("/addGameInfo", async (req, res) => {
+  const { title, content, categoryId, gameId } = req.body;
+  try {
+    await prisma.gameInfo.create({
+      data: {
+        title: title,
+        content: content,
+        categoryId: categoryId,
+        gameId: gameId,
+      },
+    });
+    res.json("Entry created");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error creating entry");
   }
 });
 
