@@ -69,7 +69,6 @@ router.get("/:gameInfoId", async (req, res) => {
   }
 });
 
-
 /**
  * @swagger
  * /createGameInfo:
@@ -117,8 +116,108 @@ router.post("/addGameInfo", async (req, res) => {
     });
     res.json(newEntry);
   } catch (error) {
-    console.error(error);
     res.status(500).send("Error creating entry");
+  }
+});
+
+/**
+ * @swagger
+ * /update/{gameInfoId}:
+ *   put:
+ *     summary: Update GameInfo
+ *     tags: [GameInfo]
+ *     description: Updates the information of a specific GameInfo including its category.
+ *     parameters:
+ *       - in: path
+ *         name: gameInfoId
+ *         required: true
+ *         description: GameInfo ID.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *               - categoryId  # Added categoryId as required for category update
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               categoryId:    # New field for category ID
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: GameInfo updated successfully.
+ *       500:
+ *         description: Error updating GameInfo.
+ */
+
+router.put("/update/:gameInfoId", async (req, res) => {
+  const { gameInfoId } = req.params;
+  const { title, content, categoryId } = req.body;
+
+  try {
+    const updateEntry = await prisma.gameInfo.update({
+      where: { id: gameInfoId },
+      data: {
+        title,
+        content,
+        categoryId,
+      },
+    });
+
+    res.json(updateEntry);
+  } catch (error) {
+    res.status(500).send("Error updating GameInfo");
+  }
+});
+
+/**
+ * @swagger
+ * /delete/{gameInfoId}:
+ *   delete:
+ *     summary: Delete GameInfo
+ *     tags: [GameInfo]
+ *     description: Deletes a specific GameInfo entry.
+ *     parameters:
+ *       - in: path
+ *         name: gameInfoId
+ *         required: true
+ *         description: GameInfo ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the game info page.
+ *       500:
+ *         description: Error deleting entry.
+ */
+
+router.delete("/delete/:gameInfoId", async (req, res) => {
+  const { gameInfoId } = req.params;
+
+  try {
+    const gameInfo = await prisma.gameInfo.findUnique({
+      where: { id: gameInfoId },
+      include: {
+        category: true,
+      },
+    });
+
+    await prisma.gameInfo.delete({
+      where: { id: gameInfoId },
+    });
+
+    res.json(`Entry deleted`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting entry");
   }
 });
 
