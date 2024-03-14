@@ -1,3 +1,13 @@
+# [0.8.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.7.0...v0.8.0) (2024-03-14)
+
+
+### Features
+
+* edit and delete gameInfo ([ab7c736](https://github.com/PMFrancisco/QuestWeaver-back/commit/ab7c736e559193bdb3e4bb8adb700bdb87425229))
+* health status ([69979fa](https://github.com/PMFrancisco/QuestWeaver-back/commit/69979fa8679fb1ea9d686143995d5671df1a81af))
+
+
+
 # [0.7.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.6.0...v0.7.0) (2024-03-09)
 
 
@@ -38,21 +48,6 @@
 
 * **db:** added gameImage to the Game model ([ef430e0](https://github.com/PMFrancisco/QuestWeaver-back/commit/ef430e07a38f2308b7ed42b41dc868fb4ae1f78f))
 * **games:** get individual games ([ced083d](https://github.com/PMFrancisco/QuestWeaver-back/commit/ced083dd0afbc90c5b5d0330ad55a1cf8c47b97c))
-
-
-
-# [0.3.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.2.0...v0.3.0) (2024-03-01)
-
-
-### Bug Fixes
-
-* removed unnecesary code ([92a7077](https://github.com/PMFrancisco/QuestWeaver-back/commit/92a70770039e724959be30a2663d36b4470e6a70))
-
-
-### Features
-
-* added create and get games ([ee3e8a2](https://github.com/PMFrancisco/QuestWeaver-back/commit/ee3e8a252c0543714047e89968f196a8f7e154c6))
-* added edit profile image ([b02af66](https://github.com/PMFrancisco/QuestWeaver-back/commit/b02af66054491d11d5ed868cc2d9dbe4608a8f3d))
 
 
 
