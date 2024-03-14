@@ -195,7 +195,7 @@ router.post(
   upload.single("profileImage"),
   async (req, res) => {
     try {
-      const userId = req.params.userId;
+      const { userId } = req.params;
 
       const b64 = Buffer.from(req.file.buffer).toString("base64");
       let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
