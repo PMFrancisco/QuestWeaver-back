@@ -36,7 +36,7 @@ const handleUpload = require("../middlewares/handleUpload");
 
 router.get("/:gameId", async (req, res) => {
   try {
-    const {gameId} = req.params;
+    const { gameId } = req.params;
 
     const map = await prisma.map.findFirst({
       where: { gameId: gameId },
@@ -48,11 +48,14 @@ router.get("/:gameId", async (req, res) => {
     });
 
     if (!map) {
-        return res.status(404).json({ error: "Map not found for the given gameId" });
-      }
+      return res
+        .status(404)
+        .json({ error: "Map not found for the given gameId" });
+    }
 
     res.json({
       mapUrl: map.mapData.backgroundImageUrl,
+      drawnElements: map.mapData.drawnElements,
       game: { id: gameId },
       tokens: tokens,
     });
@@ -135,5 +138,85 @@ router.post(
     }
   }
 );
+
+/**
+ * @swagger
+ * /map/saveMapStatus/{gameId}:
+ *   post:
+ *     summary: Save map status
+ *     tags: [Maps]
+ *     description: Saves the current state of the map and tokens.
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The game ID to which the map belongs.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mapData
+ *             properties:
+ *               mapData:
+ *                 type: object
+ *                 description: The state of the map, including URLs, drawn elements, and any other relevant information.
+ *                 properties:
+ *                   mapUrl:
+ *                     type: string
+ *                     description: URL of the map background image.
+ *                   drawnElements:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         color:
+ *                           type: string
+ *                         size:
+ *                           type: number
+ *                         points:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               x:
+ *                                 type: number
+ *                               y:
+ *                                 type: number
+ *     responses:
+ *       200:
+ *         description: Map status updated successfully.
+ *       404:
+ *         description: Map not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
+router.post("/saveMapStatus/:gameId", async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const { mapData } = req.body;
+
+    const existingMap = await prisma.map.findFirst({
+      where: { gameId: gameId },
+    });
+
+    if (existingMap) {
+      await prisma.map.update({
+        where: { id: existingMap.id },
+        data: {
+          mapData: mapData,
+        },
+      });
+      res.json({ message: "Map status updated successfully" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

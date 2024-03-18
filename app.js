@@ -5,6 +5,16 @@ const morgan = require("morgan");
 const cors = require("cors");
 require('dotenv').config();
 
+const http = require('http');
+const socketIo = require('socket.io');
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: process.env.CORS_DOMAINS,
+    methods: ["GET", "POST"],
+  }
+});
+
 
 const whitelist = process.env.CORS_DOMAINS;
 const corsOptions = {
@@ -18,6 +28,15 @@ const corsOptions = {
   credentials: true,
 };
 
+io.on('connection', (socket) => {
+  console.log('User connected');
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
 
@@ -26,6 +45,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", require("./routes"));
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
