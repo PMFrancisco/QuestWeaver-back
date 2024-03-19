@@ -1,3 +1,12 @@
+# [0.10.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.9.0...v0.10.0) (2024-03-19)
+
+
+### Features
+
+* socket async ([ad06057](https://github.com/PMFrancisco/QuestWeaver-back/commit/ad06057525f184511578b0b8c45849deada24c9c))
+
+
+
 # [0.9.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.8.0...v0.9.0) (2024-03-18)
 
 
@@ -33,15 +42,6 @@
 ### Features
 
 * can accept players ([75b2e79](https://github.com/PMFrancisco/QuestWeaver-back/commit/75b2e7917402b8e261649fb4d89188edad3a2a83))
-
-
-
-# [0.5.0](https://github.com/PMFrancisco/QuestWeaver-back/compare/v0.4.0...v0.5.0) (2024-03-04)
-
-
-### Features
-
-* **games:** creating a game also creates a user with creator role ([12bf5e2](https://github.com/PMFrancisco/QuestWeaver-back/commit/12bf5e225ef74f93b0900244f0dfad8c9221bfa8))
 
 
 
