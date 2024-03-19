@@ -1,6 +1,6 @@
 {
   "name": "questweaver-back",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Backend for a Virtual Tabletop and TTRPG Repository",
   "main": "index.js",
   "scripts": {
